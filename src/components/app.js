@@ -19,7 +19,14 @@ class App extends Component {
         item._id = randomString(8);
         this.setState({
             list: [item, ...this.state.list]
-        })
+        });
+    }
+    deleteItem = (index) => {
+        const listCopy = this.state.list.slice()
+        listCopy.splice(index, 1);
+        this.setState({
+            list: listCopy
+        });
     }
     componentDidMount() {
         this.getListData();
@@ -34,7 +41,7 @@ class App extends Component {
             <div className="container">
                 <h1 className="center">To Do List</h1>
                 <AddItem add={this.addItem} />
-                <List data={this.state.list} />
+                <List data={this.state.list} delete={this.deleteItem} />
             </div>
         );
     }
