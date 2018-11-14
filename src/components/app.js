@@ -6,9 +6,8 @@ import { Route } from 'react-router-dom';
 import axios from 'axios';
 import List from './list';
 import AddItem from './add_item';
-
-const BASE_URL = 'http://api.reactprototypes.com/todos';
-const API_KEY = '?key=c19_cstewa91';
+import ItemView from './item_view'
+import { BASE_URL, API_KEY } from '../helpers/common'
 
 class App extends Component {
     constructor(props) {
@@ -45,12 +44,13 @@ class App extends Component {
         const { error, list } = this.state;
         return (
             <div className="container">
-                <Route exact path="/" render={() => {
-                    return <List data={this.state.list} delete={this.deleteItem} error={error}/>
+                <Route exact path="/" render={(props) => {
+                    return <List data={list} delete={this.deleteItem} error={error} {...props} />
                 }} />
-                <Route path="/add-item" render={() => {
-                    return <AddItem add={this.addItem} />
+                <Route path="/add-item" render={(routingProps) => {
+                    return <AddItem add={this.addItem} {...routingProps} />
                 }} />
+                <Route path="/item/:item_id" component={ItemView} />
             </div>
         );
     }
