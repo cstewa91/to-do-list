@@ -2,10 +2,10 @@ import 'materialize-css/dist/css/materialize.min.css';
 import 'materialize-css/dist/js/materialize';
 import '../assets/css/app.css';
 import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
 import axios from 'axios';
 import List from './list';
 import AddItem from './add_item';
-import { randomString } from '../helpers';
 
 const BASE_URL = 'http://api.reactprototypes.com/todos';
 const API_KEY = '?key=c19_cstewa91';
@@ -42,11 +42,15 @@ class App extends Component {
         }
     }
     render() {
+        const { error, list } = this.state;
         return (
             <div className="container">
-                <h1 className="center">To Do List</h1>
-                <AddItem add={this.addItem} />
-                <List data={this.state.list} delete={this.deleteItem} />
+                <Route exact path="/" render={() => {
+                    return <List data={this.state.list} delete={this.deleteItem} error={error}/>
+                }} />
+                <Route path="/add-item" render={() => {
+                    return <AddItem add={this.addItem} />
+                }} />
             </div>
         );
     }
