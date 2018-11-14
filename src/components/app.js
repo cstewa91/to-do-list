@@ -2,13 +2,12 @@ import 'materialize-css/dist/css/materialize.min.css';
 import 'materialize-css/dist/js/materialize';
 import '../assets/css/app.css';
 import React, { Component } from 'react';
+import { Route } from 'react-router-dom';
 import axios from 'axios';
 import List from './list';
 import AddItem from './add_item';
-import { randomString } from '../helpers';
-
-const BASE_URL = 'http://api.reactprototypes.com/todos';
-const API_KEY = '?key=c19_cstewa91';
+import ItemView from './item_view'
+import { BASE_URL, API_KEY } from '../helpers/common'
 
 class App extends Component {
     constructor(props) {
@@ -42,11 +41,16 @@ class App extends Component {
         }
     }
     render() {
+        const { error, list } = this.state;
         return (
             <div className="container">
-                <h1 className="center">To Do List</h1>
-                <AddItem add={this.addItem} />
-                <List data={this.state.list} delete={this.deleteItem} />
+                <Route exact path="/" render={(props) => {
+                    return <List data={list} delete={this.deleteItem} error={error} {...props} />
+                }} />
+                <Route path="/add-item" render={(routingProps) => {
+                    return <AddItem add={this.addItem} {...routingProps} />
+                }} />
+                <Route path="/item/:item_id" component={ItemView} />
             </div>
         );
     }
